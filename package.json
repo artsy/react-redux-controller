@@ -1,0 +1,53 @@
+{
+  "name": "react-redux-controller",
+  "version": "0.1.0",
+  "description": "Library for creating a controller layer to link React and Redux.",
+  "license": "MIT",
+  "keywords": [
+    "controller",
+    "react",
+    "redux"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/artsy/react-redux-controller.git"
+  },
+  "author": {
+    "name": "Alan Johnson",
+    "email": "alan@breakrs.com"
+  },
+  "engines": {
+    "node": ">= 5.1.x"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "mkdir -p lib && babel ./src --out-dir ./lib",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "co": "^4.6.0",
+    "ramda": "^0.18.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.3.17",
+    "babel-core": "^6.3.21",
+    "babel-loader": "^6.2.0",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-es2015-loose": "^6.1.3",
+    "babel-preset-react": "^6.3.13",
+    "co": "^4.6.0",
+    "mocha": "*",
+    "ramda": "^0.18.0",
+    "react": "0.14.0",
+    "react-redux": "^4.0.0",
+    "redux": "^3.0.0",
+    "should": "*",
+    "webpack": "^1.12.9"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ]
+}
