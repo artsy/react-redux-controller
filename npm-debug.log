@@ -1,0 +1,121 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/alan/.nvm/versions/node/v5.1.1/bin/node',
+1 verbose cli   '/Users/alan/.nvm/versions/node/v5.1.1/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.3.12
+3 info using node@v5.1.1
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/alan/projects/react-redux-controller',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/alan/.npm/react-redux-controller/0.1.0/package.tgz not in flight; packing
+9 info lifecycle react-redux-controller@0.1.0~prepublish: react-redux-controller@0.1.0
+10 verbose lifecycle react-redux-controller@0.1.0~prepublish: unsafe-perm in lifecycle true
+11 verbose lifecycle react-redux-controller@0.1.0~prepublish: PATH: /Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/bin/node-gyp-bin:/Users/alan/projects/react-redux-controller/node_modules/.bin:/Users/alan/.nvm/versions/node/v5.1.1/bin:/usr/local/var/rbenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+12 verbose lifecycle react-redux-controller@0.1.0~prepublish: CWD: /Users/alan/projects/react-redux-controller
+13 silly lifecycle react-redux-controller@0.1.0~prepublish: Args: [ '-c', 'npm run build' ]
+14 silly lifecycle react-redux-controller@0.1.0~prepublish: Returned: code: 0  signal: null
+15 verbose tar pack [ '/Users/alan/.npm/react-redux-controller/0.1.0/package.tgz',
+15 verbose tar pack   '/Users/alan/projects/react-redux-controller' ]
+16 verbose tarball /Users/alan/.npm/react-redux-controller/0.1.0/package.tgz
+17 verbose folder /Users/alan/projects/react-redux-controller
+18 verbose addLocalTarball adding from inside cache /Users/alan/.npm/react-redux-controller/0.1.0/package.tgz
+19 silly cache afterAdd react-redux-controller@0.1.0
+20 verbose afterAdd /Users/alan/.npm/react-redux-controller/0.1.0/package/package.json not in flight; writing
+21 verbose afterAdd /Users/alan/.npm/react-redux-controller/0.1.0/package/package.json written
+22 silly publish { name: 'react-redux-controller',
+22 silly publish   version: '0.1.0',
+22 silly publish   description: 'Library for creating a controller layer to link React and Redux.',
+22 silly publish   license: 'MIT',
+22 silly publish   keywords: [ 'controller', 'react', 'redux' ],
+22 silly publish   repository:
+22 silly publish    { type: 'git',
+22 silly publish      url: 'git://github.com/artsy/react-redux-controller.git' },
+22 silly publish   author: { name: 'Alan Johnson', email: 'alan@breakrs.com' },
+22 silly publish   engines: { node: '>= 5.1.x' },
+22 silly publish   main: 'lib/index.js',
+22 silly publish   scripts:
+22 silly publish    { build: 'mkdir -p lib && babel ./src --out-dir ./lib',
+22 silly publish      prepublish: 'npm run build' },
+22 silly publish   dependencies: { co: '^4.6.0', ramda: '^0.18.0' },
+22 silly publish   devDependencies:
+22 silly publish    { 'babel-cli': '^6.3.17',
+22 silly publish      'babel-core': '^6.3.21',
+22 silly publish      'babel-loader': '^6.2.0',
+22 silly publish      'babel-polyfill': '^6.3.14',
+22 silly publish      'babel-preset-es2015': '^6.3.13',
+22 silly publish      'babel-preset-es2015-loose': '^6.1.3',
+22 silly publish      'babel-preset-react': '^6.3.13',
+22 silly publish      co: '^4.6.0',
+22 silly publish      mocha: '*',
+22 silly publish      ramda: '^0.18.0',
+22 silly publish      react: '0.14.0',
+22 silly publish      'react-redux': '^4.0.0',
+22 silly publish      redux: '^3.0.0',
+22 silly publish      should: '*',
+22 silly publish      webpack: '^1.12.9' },
+22 silly publish   files: [ 'dist', 'lib', 'src' ],
+22 silly publish   readme: '# react-redux-controller\n\n**react-redux-controller** is a library that adds some opinion to the [react-redux](https://github.com/rackt/react-redux) binding of [React](https://facebook.github.io/react/index.html) components to the [Redux](http://redux.js.org/) store. It creates the entity of a `Controller`, which is intended to be the single point of integration between React and Redux. The controller passes data and callbacks to the UI components via the [React `context`](https://facebook.github.io/react/docs/context.html). It\'s one solution to [the question](http://stackoverflow.com/a/34320909/807674) of how to get data and controller-like methods (e.g. event handlers) to the React UI components.\n\n## Philosophy\n\nThis library takes the opinion that React components should solely be focused on the job of rendering and capturing user input, and that Redux actions and reducers should be soley focused on the job of managing the store and providing a view of the state of the store in the form of [selectors](http://rackt.org/redux/docs/basics/UsageWithReact.html). The plumbing of distributing data to components, as well as deciding what to fetch, when to fetch, how to manage latency, and what to do with error handling, should be vested in an explicit controller layer.\n\nThis differs from alternative methods in a number of ways:\n\n- The ancestors of a component are not responsible for conveying dependencies to via `props` -- particularly when it comes to dependencies the ancestors don\'t use themselves.\n- The components are not coupled to Redux in any way -- no `connect` distributed throughout the component tree.\n- There are no [smart components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.m5y0saa0k). Well there\'s one, but it\'s hidden inside the Controller.\n- Action creators do not peforming any fetching. They are only responsible for constructing action objects, as is the case in vanilla Redux, with no middleware needed.\n\n## Usage\n\nThe **controller** factory requires 3 parameters:\n\n- The root component of the UI component tree.\n- An object that holds controller generator functions.\n- Any number of selector bundles, which are likely simply imported selector modules, each selector annotated a [`propType`](https://facebook.github.io/react/docs/reusable-components.html) that indicates what kind of data it provides.\n\nThe functionality of the controller layer is implemented using [generator functions](http://www.2ality.com/2015/03/es6-generators.html). Within these functions, `yield` may be used await the results of [Promises](http://www.2ality.com/2014/09/es6-promises-foundations.html) and to request selector values and root component properties. As a very rough sketch of how you might use this library:\n\n```\n// controllers/app_controller.js\n\nimport AppLayout from \'../components/app_layout\';\nimport * as mySelectors from \'../selectors/my_selectors\';\n\nconst controllerGenerators = {\n  *onUserActivity(meaningfulParam) {\n    const { dispatch, otherData } = yield getProps;\n    dispatch(actions.fetchingData());\n    try {\n      const apiData = yield httpRequest(`http://myapi.com/${otherData}`);\n      return dispatch(actions.fetchingSuccessful(apiData)); \n    } catch (err) {\n      return dispatch(actions.errorFetching(err));\n    }\n  },\n  // ... other controller generators follow\n};\n\nconst selectorBundles = [\n  mySelectors,\n];\n\nexport default controller(AppLayout, controllerMethodFactories, selectorBundles);\n\n```\n\nBetter examples to come.',
+22 silly publish   readmeFilename: 'README.md',
+22 silly publish   gitHead: '7aea51200a901124d518d5b093207e30d321f75b',
+22 silly publish   bugs: { url: 'https://github.com/artsy/react-redux-controller/issues' },
+22 silly publish   homepage: 'https://github.com/artsy/react-redux-controller#readme',
+22 silly publish   _id: 'react-redux-controller@0.1.0',
+22 silly publish   _shasum: 'd49329b80dfa40dea7a237863beab688cca5c10c',
+22 silly publish   _from: '.' }
+23 verbose getPublishConfig undefined
+24 silly mapToRegistry name react-redux-controller
+25 silly mapToRegistry using default registry
+26 silly mapToRegistry registry https://registry.npmjs.org/
+27 silly mapToRegistry uri https://registry.npmjs.org/react-redux-controller
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/alan/.npm/react-redux-controller/0.1.0/package.tgz
+30 verbose request uri https://registry.npmjs.org/react-redux-controller
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 3:22:44 AM
+33 verbose request using bearer token for auth
+34 verbose request id 8d9387cffbf4d56f
+35 http request PUT https://registry.npmjs.org/react-redux-controller
+36 http 403 https://registry.npmjs.org/react-redux-controller
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Tue, 29 Dec 2015 08:22:45 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-jfk1023-JFK',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1451377364.571343,VS0,VE1361' }
+38 verbose request invalidating /Users/alan/.npm/registry.npmjs.org/react-redux-controller on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 0.1.0." : react-redux-controller
+40 verbose stack     at makeError (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:252:14)
+40 verbose stack     at Request._callback (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:172:14)
+40 verbose stack     at Request.self.callback (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/request/request.js:198:22)
+40 verbose stack     at emitTwo (events.js:87:13)
+40 verbose stack     at Request.emit (events.js:172:7)
+40 verbose stack     at Request.<anonymous> (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/request/request.js:1082:10)
+40 verbose stack     at emitOne (events.js:82:20)
+40 verbose stack     at Request.emit (events.js:169:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/alan/.nvm/versions/node/v5.1.1/lib/node_modules/npm/node_modules/request/request.js:1009:12)
+41 verbose statusCode 403
+42 verbose pkgid react-redux-controller
+43 verbose cwd /Users/alan/projects/react-redux-controller
+44 error Darwin 14.5.0
+45 error argv "/Users/alan/.nvm/versions/node/v5.1.1/bin/node" "/Users/alan/.nvm/versions/node/v5.1.1/bin/npm" "publish"
+46 error node v5.1.1
+47 error npm  v3.3.12
+48 error code E403
+49 error "You cannot publish over the previously published version 0.1.0." : react-redux-controller
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
