@@ -1,0 +1,53 @@
+{
+  "name": "redux-async-example",
+  "version": "0.0.0",
+  "description": "Redux async example",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rackt/redux.git"
+  },
+  "keywords": [
+    "react",
+    "reactjs",
+    "hot",
+    "reload",
+    "hmr",
+    "live",
+    "edit",
+    "webpack",
+    "flux"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rackt/redux/issues"
+  },
+  "homepage": "http://rackt.github.io/redux",
+  "dependencies": {
+    "isomorphic-fetch": "^2.1.1",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "react-redux": "^4.0.0",
+    "react-redux-controller": "^0.1.1",
+    "redux": "^3.0.0",
+    "redux-logger": "^2.0.2",
+    "redux-thunk": "^0.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.21",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-react-transform": "^2.0.0-beta1",
+    "babel-polyfill": "^6.3.14",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "expect": "^1.6.0",
+    "express": "^4.13.3",
+    "node-libs-browser": "^0.5.2",
+    "react-transform-hmr": "^1.0.0",
+    "webpack": "^1.11.0",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  }
+}
