@@ -1,17 +1,15 @@
-import React, { PropTypes, Component } from 'react'
+import React, { PropTypes } from 'react'
 
-export default class Posts extends Component {
-  render() {
-    return (
-      <ul>
-        {this.props.posts.map((post, i) =>
-          <li key={i}>{post.title}</li>
-        )}
-      </ul>
-    )
-  }
+export default function Posts(_, { posts }) {
+  return (
+    <ul>
+      { posts.map((post, i) =>
+        <li key={ i }>{ post.title }</li>
+      )}
+    </ul>
+  )
 }
 
-Posts.propTypes = {
+Posts.contextTypes = {
   posts: PropTypes.array.isRequired
 }

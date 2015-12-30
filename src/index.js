@@ -35,8 +35,8 @@ export function toDispatch(action) {
  *   forwarding on the arguments the generator receives.
  */
 export function runControllerGenerator(propsGetter) {
-  return controllerGenerator => co.wrap(function* coWrapper(...args) {
-    const gen = controllerGenerator(...args);
+  return controllerGenerator => co.wrap(function* coWrapper() {
+    const gen = controllerGenerator.apply(this, arguments);
     let value;
     let done;
     let toController;
@@ -119,15 +119,25 @@ export function controller(RootComponent, controllerGenerators, selectorBundles,
 
       const injectedControllerGeneratorRunner = controllerGeneratorRunner(() => this.props);
       this.controllerMethods = R.map(controllerGenerator =>
-        injectedControllerGeneratorRunner(controllerGenerator).bind(controllerGenerators)
+        injectedControllerGeneratorRunner(controllerGenerator)
       , controllerGenerators);
+
+      // Ensure controller methods can access each other via `this`
+      for (const methodName of Object.keys(this.controllerMethods)) {
+        this.controllerMethods[methodName] = this.controllerMethods[methodName].bind(this.controllerMethods);
+      }
+    }
+
+    componentWillMount() {
+      if (this.controllerMethods.initialize) { this.controllerMethods.initialize(); }
     }
 
     getChildContext() {
       // Rather than injecting all of the RootComponent props into the context,
       // we only explictly pass selector and controller method props.
       const selectorProps = R.pick(R.keys(selectorPropTypes), this.props);
-      return R.merge(selectorProps, this.controllerMethods);
+      const childContext = R.merge(selectorProps, this.controllerMethods);
+      return childContext;
     }
 
     render() {
