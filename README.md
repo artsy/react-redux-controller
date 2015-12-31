@@ -31,12 +31,15 @@ import AppLayout from '../components/app_layout';
 import * as mySelectors from '../selectors/my_selectors';
 
 const controllerGenerators = {
+  *initialize() {
+    // ... any code that should run before initial render (like loading actions)
+  },
   *onUserActivity(meaningfulParam) {
     const { dispatch, otherData } = yield getProps;
     dispatch(actions.fetchingData());
     try {
       const apiData = yield httpRequest(`http://myapi.com/${otherData}`);
-      return dispatch(actions.fetchingSuccessful(apiData)); 
+      retudrn dispatch(actions.fetchingSuccessful(apiData)); 
     } catch (err) {
       return dispatch(actions.errorFetching(err));
     }
@@ -52,4 +55,6 @@ export default controller(AppLayout, controllerMethodFactories, selectorBundles)
 
 ```
 
-Better examples to come.
+## Example
+
+To see an in-depth example of usage of this library, [the async example from the redux guide](http://redux.js.org/docs/advanced/ExampleRedditAPI.html) is ported to use the controller approach [in this repo](https://github.com/artsy/react-redux-controller/blob/master/example/README.md).
