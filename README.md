@@ -28,6 +28,7 @@ The functionality of the controller layer is implemented using [generator functi
 
 import { controller, getProps } from 'react-redux-controller';
 import AppLayout from '../components/app_layout';
+import * as actions from '../actions';
 import * as mySelectors from '../selectors/my_selectors';
 
 const controllerGenerators = {
