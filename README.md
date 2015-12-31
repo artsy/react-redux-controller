@@ -23,7 +23,7 @@ The **controller** factory requires 3 parameters:
 
 The functionality of the controller layer is implemented using [generator functions](http://www.2ality.com/2015/03/es6-generators.html). Within these functions, `yield` may be used await the results of [Promises](http://www.2ality.com/2014/09/es6-promises-foundations.html) and to request selector values and root component properties. As a very rough sketch of how you might use this library:
 
-```
+```javascript
 // controllers/app_controller.js
 
 import { controller, getProps } from 'react-redux-controller';
@@ -39,7 +39,7 @@ const controllerGenerators = {
     dispatch(actions.fetchingData());
     try {
       const apiData = yield httpRequest(`http://myapi.com/${otherData}`);
-      retudrn dispatch(actions.fetchingSuccessful(apiData)); 
+      return dispatch(actions.fetchingSuccessful(apiData));
     } catch (err) {
       return dispatch(actions.errorFetching(err));
     }
