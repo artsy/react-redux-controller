@@ -11,7 +11,7 @@ This differs from alternative methods in a number of ways:
 - The ancestors of a component are not responsible for conveying dependencies to via `props` -- particularly when it comes to dependencies the ancestors don't use themselves.
 - The components are not coupled to Redux in any way -- no `connect` distributed throughout the component tree.
 - There are no [smart components](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.m5y0saa0k). Well there's one, but it's hidden inside the Controller.
-- Action creators do not peforming any fetching. They are only responsible for constructing action objects, as is the case in vanilla Redux, with no middleware needed.
+- Action creators do not perform any fetching. They are only responsible for constructing action objects, as is the case in vanilla Redux, with no middleware needed.
 
 ## Usage
 
