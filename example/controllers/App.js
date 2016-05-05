@@ -1,6 +1,5 @@
 import 'babel-polyfill'
 import fetch from 'isomorphic-fetch'
-import React, { Component, PropTypes } from 'react'
 import { controller, getProps } from 'react-redux-controller'
 import * as actions from '../actions'
 import * as selectors from '../selectors'
