@@ -52,7 +52,7 @@ const selectorBundles = [
   mySelectors,
 ];
 
-export default controller(AppLayout, controllerMethodFactories, selectorBundles);
+export default controller(AppLayout, controllerGenerators, selectorBundles);
 
 ```
 
