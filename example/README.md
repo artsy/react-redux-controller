@@ -50,6 +50,6 @@ Use of [co](https://github.com/tj/co) allows ES6 `yield` to be used to suspend c
 
 [Special symbols](https://github.com/artsy/react-redux-controller/blob/master/example/controllers/App.js#L4) can be used to access the controller's props, as injected by react-redux. These include the raw state from the store and `dispatch` for triggering state changes. [Controller generators use `yield`](https://github.com/artsy/react-redux-controller/blob/master/example/controllers/App.js#L17) to request these dependencies.
 
-### `yield` to defer to subcomponents
+### `yield` to delegate to other controller methods
 
 Controller methods are composable. Behind the scenes, they are converted into regular method functions that return promises, and they are bound into a shared `this` context. This means you can call other controller methods and use `yield` await them, as seen in [the App controller](https://github.com/artsy/react-redux-controller/blob/master/example/controllers/App.js#L22).
