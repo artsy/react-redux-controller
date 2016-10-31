@@ -4,7 +4,7 @@
 
 ## Philosophy
 
-This library takes the opinion that React components should solely be focused on the job of rendering and capturing user input, and that Redux actions and reducers should be soley focused on the job of managing the store and providing a view of the state of the store in the form of [selectors](http://rackt.org/redux/docs/basics/UsageWithReact.html). The plumbing of distributing data to components, as well as deciding what to fetch, when to fetch, how to manage latency, and what to do with error handling, should be vested in an explicit controller layer.
+This library takes the opinion that React components should solely be focused on the job of rendering and capturing user input, and that Redux actions and reducers should be soley focused on the job of managing the store and providing a view of the state of the store in the form of [selectors](http://redux.js.org/docs/basics/UsageWithReact.html). The plumbing of distributing data to components, as well as deciding what to fetch, when to fetch, how to manage latency, and what to do with error handling, should be vested in an explicit controller layer.
 
 This differs from alternative methods in a number of ways:
 
