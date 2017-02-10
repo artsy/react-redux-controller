@@ -1,6 +1,6 @@
-import { default as React, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import R from 'ramda';
+import _ from 'lodash';
 import co from 'co';
 import { aggregateSelectors } from './selector_utils';
 
@@ -16,7 +16,7 @@ export const getProps = Symbol('getProps');
 export const getPropsGetter = Symbol('getPropsGetter');
 
 /**
- * Conveniece request to dispatch an action directly from a controller
+ * Convenience request to dispatch an action directly from a controller
  * generator.
  * @param  {*} action a Redux action
  * @return {*} the result of dispatching the action
@@ -31,7 +31,7 @@ export function toDispatch(action) {
  * delegating Promise to `co` and processing special values that are used to
  * request data from the controller.
  * @param  {Function} propsGetter gets the current controller props.
- * @return {GeneratorToMethod} a function that converts a generator to a method
+ * @return {Function} a function that converts a generator to a method
  *   forwarding on the arguments the generator receives.
  */
 export function runControllerGenerator(propsGetter) {
@@ -59,7 +59,11 @@ export function runControllerGenerator(propsGetter) {
         toController = propsGetter;
       } else {
         // Defer to `co`
-        toController = yield value;
+        try {
+          toController = yield value;
+        } catch (e) {
+          gen.throw(e);
+        }
       }
     }
 
@@ -98,29 +102,29 @@ export function runControllerGenerator(propsGetter) {
  * @param  {Function} [controllerGeneratorRunner = runControllerGenerator] is
  *   the generator wrapper that will be used to run the generator methods.
  * @return {React.Component} a decorated version of RootComponent, with
- *   `context` set up for its descendents.
+ *   `context` set up for its descendants.
  */
 export function controller(RootComponent, controllerGenerators, selectorBundles, controllerGeneratorRunner = runControllerGenerator) {
   // Combine selector bundles into one mapStateToProps function.
-  const mapStateToProps = aggregateSelectors(R.mergeAll(R.flatten([selectorBundles])));
+  const mapStateToProps = aggregateSelectors(Object.assign({ }, ...(_.flattenDeep([selectorBundles]))));
   const selectorPropTypes = mapStateToProps.propTypes;
 
   // All the controller method propTypes should simply be "function" so we can
-  // synthensize those.
-  const controllerMethodPropTypes = R.map(() => PropTypes.func.isRequired, controllerGenerators);
+  // synthesize those.
+  const controllerMethodPropTypes = _.mapValues(controllerGenerators, () => PropTypes.func.isRequired);
 
   // Declare the availability of all of the selectors and controller methods
   // in the React context for descendant components.
-  const contextPropTypes = R.merge(selectorPropTypes, controllerMethodPropTypes);
+  const contextPropTypes = {...selectorPropTypes, ...controllerMethodPropTypes};
 
   class Controller extends React.Component {
     constructor(...constructorArgs) {
       super(...constructorArgs);
 
       const injectedControllerGeneratorRunner = controllerGeneratorRunner(() => this.props);
-      this.controllerMethods = R.map(controllerGenerator =>
+      this.controllerMethods = _.mapValues(controllerGenerators, controllerGenerator =>
         injectedControllerGeneratorRunner(controllerGenerator)
-      , controllerGenerators);
+      );
 
       // Ensure controller methods can access each other via `this`
       for (const methodName of Object.keys(this.controllerMethods)) {
@@ -129,15 +133,22 @@ export function controller(RootComponent, controllerGenerators, selectorBundles,
     }
 
     componentWillMount() {
-      if (this.controllerMethods.initialize) { this.controllerMethods.initialize(); }
+      if (this.controllerMethods.initialize) {
+        this.controllerMethods.initialize();
+      }
+    }
+
+    componentWillUnMount() {
+      if (this.controllerMethods.deinitialize) {
+        this.controllerMethods.deinitialize();
+      }
     }
 
     getChildContext() {
       // Rather than injecting all of the RootComponent props into the context,
-      // we only explictly pass selector and controller method props.
-      const selectorProps = R.pick(R.keys(selectorPropTypes), this.props);
-      const childContext = R.merge(selectorProps, this.controllerMethods);
-      return childContext;
+      // we only explicitly pass selector and controller method props.
+      const selectorProps = _.pick(this.props, Object.keys(selectorPropTypes));
+      return { ...selectorProps, ...this.controllerMethods };
     }
 
     render() {
@@ -147,7 +158,7 @@ export function controller(RootComponent, controllerGenerators, selectorBundles,
     }
   }
 
-  Controller.propTypes = R.merge(selectorPropTypes, RootComponent.propTypes || {});
+  Controller.propTypes = { ...selectorPropTypes, ...(RootComponent.propTypes || {}) };
   Controller.childContextTypes = contextPropTypes;
 
   return connect(mapStateToProps)(Controller);
