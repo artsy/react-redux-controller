@@ -1,4 +1,4 @@
-import R from 'ramda';
+import _ from 'lodash';
 
 /**
  * Combines bundle of selector functions into a single super selector function
@@ -38,14 +38,14 @@ import R from 'ramda';
  * should be annotated by assigning a `propType` property to the function
  * within the module where it is declared.
  *
- * @param  {Object.<string, Function>} selectorBundles contains the
+ * @param  {Object.<string, Function>} bundle contains the
  *   selectors, as explained above.
  * @return {Function} a function that, when given the store state, produces all
  *   of the selector outputs.
  */
 export function aggregateSelectors(bundle) {
-  const combinedSelector = state => R.map(selectorFunction => selectorFunction(state), bundle);
-  combinedSelector.propTypes = R.map(selectorFunction => selectorFunction.propType, bundle);
+  const combinedSelector = state => _.mapValues(bundle, selectorFunction => selectorFunction(state));
+  combinedSelector.propTypes = _.mapValues(bundle, selectorFunction => selectorFunction.propType);
   return combinedSelector;
 }
 
@@ -57,9 +57,11 @@ export function aggregateSelectors(bundle) {
  *   annotated with a propType property.
  */
 export function disaggregateSuperSelector(superSelector) {
-  return R.mapObjIndexed((propType, propName) => {
+//TODO: refactor for lodash
+/*  return R.mapObjIndexed((propType, propName) => {
     const singleSelector = R.pipe(superSelector, R.prop(propName));
     singleSelector.propType = propType;
     return singleSelector;
   }, superSelector.propTypes);
+*/
 }
