@@ -1,8 +1,9 @@
-import { default as React, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import R from 'ramda';
+import React from 'react';
 import co from 'co';
 import { aggregateSelectors } from './selector_utils';
+import { connect } from 'react-redux';
 
 const toDispatchSymbol = Symbol('toDispatch');
 
