@@ -1,6 +1,6 @@
 {
   "name": "react-redux-controller",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Library for creating a controller layer to link React and Redux.",
   "license": "MIT",
   "keywords": [
