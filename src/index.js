@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import R from 'ramda';
 import React from 'react';
 import co from 'co';
 import { aggregateSelectors } from './selector_utils';
+import { mapObj, pick, merge, mergeAll } from './utils';
 import { connect } from 'react-redux';
 
 const toDispatchSymbol = Symbol('toDispatch');
@@ -103,23 +103,23 @@ export function runControllerGenerator(propsGetter) {
  */
 export function controller(RootComponent, controllerGenerators, selectorBundles, controllerGeneratorRunner = runControllerGenerator) {
   // Combine selector bundles into one mapStateToProps function.
-  const mapStateToProps = aggregateSelectors(R.mergeAll(R.flatten([selectorBundles])));
+  const mapStateToProps = aggregateSelectors(mergeAll(selectorBundles));
   const selectorPropTypes = mapStateToProps.propTypes;
 
   // All the controller method propTypes should simply be "function" so we can
   // synthensize those.
-  const controllerMethodPropTypes = R.map(() => PropTypes.func.isRequired, controllerGenerators);
+  const controllerMethodPropTypes = mapObj(() => PropTypes.func.isRequired, controllerGenerators);
 
   // Declare the availability of all of the selectors and controller methods
   // in the React context for descendant components.
-  const contextPropTypes = R.merge(selectorPropTypes, controllerMethodPropTypes);
+  const contextPropTypes = merge(selectorPropTypes, controllerMethodPropTypes);
 
   class Controller extends React.Component {
     constructor(...constructorArgs) {
       super(...constructorArgs);
 
       const injectedControllerGeneratorRunner = controllerGeneratorRunner(() => this.props);
-      this.controllerMethods = R.map(controllerGenerator =>
+      this.controllerMethods = mapObj(controllerGenerator =>
         injectedControllerGeneratorRunner(controllerGenerator)
       , controllerGenerators);
 
@@ -136,8 +136,8 @@ export function controller(RootComponent, controllerGenerators, selectorBundles,
     getChildContext() {
       // Rather than injecting all of the RootComponent props into the context,
       // we only explictly pass selector and controller method props.
-      const selectorProps = R.pick(R.keys(selectorPropTypes), this.props);
-      const childContext = R.merge(selectorProps, this.controllerMethods);
+      const selectorProps = pick(Object.keys(selectorPropTypes), this.props);
+      const childContext = merge(selectorProps, this.controllerMethods);
       return childContext;
     }
 
@@ -148,7 +148,7 @@ export function controller(RootComponent, controllerGenerators, selectorBundles,
     }
   }
 
-  Controller.propTypes = R.merge(selectorPropTypes, RootComponent.propTypes || {});
+  Controller.propTypes = merge(selectorPropTypes, RootComponent.propTypes || {});
   Controller.childContextTypes = contextPropTypes;
 
   return connect(mapStateToProps)(Controller);

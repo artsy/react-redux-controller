@@ -1,4 +1,4 @@
-import R from 'ramda';
+import { mapObj } from './utils';
 
 /**
  * Combines bundle of selector functions into a single super selector function
@@ -44,8 +44,8 @@ import R from 'ramda';
  *   of the selector outputs.
  */
 export function aggregateSelectors(bundle) {
-  const combinedSelector = state => R.map(selectorFunction => selectorFunction(state), bundle);
-  combinedSelector.propTypes = R.map(selectorFunction => selectorFunction.propType, bundle);
+  const combinedSelector = state => mapObj(selectorFunction => selectorFunction(state), bundle);
+  combinedSelector.propTypes = mapObj(selectorFunction => selectorFunction.propType, bundle);
   return combinedSelector;
 }
 
@@ -57,8 +57,8 @@ export function aggregateSelectors(bundle) {
  *   annotated with a propType property.
  */
 export function disaggregateSuperSelector(superSelector) {
-  return R.mapObjIndexed((propType, propName) => {
-    const singleSelector = R.pipe(superSelector, R.prop(propName));
+  return mapObj((propType, propName) => {
+    const singleSelector = store => superSelector(store)[propName];
     singleSelector.propType = propType;
     return singleSelector;
   }, superSelector.propTypes);
