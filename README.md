@@ -2,6 +2,8 @@
 
 **react-redux-controller** is a library that adds some opinion to the [react-redux](https://github.com/rackt/react-redux) binding of [React](https://facebook.github.io/react/index.html) components to the [Redux](http://redux.js.org/) store. It creates the entity of a `Controller`, which is intended to be the single point of integration between React and Redux. The controller passes data and callbacks to the UI components via the [React `context`](https://facebook.github.io/react/docs/context.html). It's one solution to [the question](http://stackoverflow.com/a/34320909/807674) of how to get data and controller-like methods (e.g. event handlers) to the React UI components.
 
+> **Note** Although _react-redux-controller_ continues to be used in production at Artsy, it is not actively being developed. We may or may not continue to develop it. The issues on the future of the architecture should be considered a doucment on lessons learned, rather than an intention to actually release a future version. Anyone should feel free use this code as-is or develop their own fork.
+
 ## Philosophy
 
 This library takes the opinion that React components should solely be focused on the job of rendering and capturing user input, and that Redux actions and reducers should be soley focused on the job of managing the store and providing a view of the state of the store in the form of [selectors](http://redux.js.org/docs/basics/UsageWithReact.html). The plumbing of distributing data to components, as well as deciding what to fetch, when to fetch, how to manage latency, and what to do with error handling, should be vested in an explicit controller layer.
